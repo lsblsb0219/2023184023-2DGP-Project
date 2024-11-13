@@ -1,5 +1,5 @@
 from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT
-
+import mouse
 
 
 def start_event(e):
@@ -46,6 +46,9 @@ class StateMachine:
         self.transitions = transitions
 
     def update(self):
+        # 마우스 좌표
+        mouse_x, mouse_y = mouse.handle_mouse_events()
+
         self.cur_state.do(self.o)
         if self.event_que:
             event = self.event_que.pop(0)
