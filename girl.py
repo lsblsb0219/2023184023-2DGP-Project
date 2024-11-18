@@ -1,4 +1,4 @@
-from pico2d import get_time, load_image
+from pico2d import load_image
 from state_machine import *
 
 class Idle:
@@ -6,16 +6,15 @@ class Idle:
     def enter(girl, e):
         if start_event(e):
             girl.action = 12
-            girl.face_dir = 1
+            girl.xface_dir = 1
         elif right_down(e) or left_up(e):
-            girl.action = 11
-            girl.face_dir = -1
-        elif left_down(e) or right_up(e):
             girl.action = 9
-            girl.face_dir = 1
+            girl.xface_dir = -1
+        elif left_down(e) or right_up(e):
+            girl.action = 11
+            girl.xface_dir = 1
 
         girl.frame = 0
-        girl.wait_time = get_time()
 
     @staticmethod
     def exit(girl, e):
@@ -34,9 +33,9 @@ class Run:
     @staticmethod
     def enter(girl, e):
         if right_down(e) or left_up(e):  # 오른쪽으로 RUN
-            girl.dir, girl.face_dir, girl.action = 1, 1, 11
+            girl.dir, girl.xface_dir, girl.action = 1, 1, 11
         elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
-            girl.dir, girl.face_dir, girl.action = -1, -1, 9
+            girl.dir, girl.xface_dir, girl.action = -1, -1, 9
 
     @staticmethod
     def exit(girl, e):
@@ -46,7 +45,8 @@ class Run:
     @staticmethod
     def do(girl):
         girl.frame = (girl.frame + 1) % 4
-        girl.x += girl.dir * 2
+        if 0 < girl.x + girl.dir * 2 < 800:
+            girl.x += girl.dir * 2
         pass
 
     @staticmethod
@@ -58,7 +58,7 @@ class Run:
 class Girl:
     def __init__(self):
         self.x, self.y = 400, 300
-        self.face_dir = 1
+        self.xface_dir, self.yface_dir = 1, 1
         self.image = load_image('Haley.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
