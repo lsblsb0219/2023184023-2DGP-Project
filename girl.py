@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import load_image, draw_rectangle
 from state_machine import *
 import mouse
 
@@ -98,3 +98,7 @@ class Girl:
 
     def draw(self):
         self.state_machine.draw()
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
