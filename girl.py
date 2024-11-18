@@ -5,13 +5,13 @@ class Idle:
     @staticmethod
     def enter(girl, e):
         if start_event(e):
-            girl.action = 3
+            girl.action = 12
             girl.face_dir = 1
         elif right_down(e) or left_up(e):
-            girl.action = 2
+            girl.action = 11
             girl.face_dir = -1
         elif left_down(e) or right_up(e):
-            girl.action = 3
+            girl.action = 9
             girl.face_dir = 1
 
         girl.frame = 0
@@ -30,8 +30,14 @@ class Idle:
         girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 16 * 3, 32 * 3)
 
 
-
 class Run:
+    @staticmethod
+    def enter(girl, e):
+        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
+            girl.dir, girl.face_dir, girl.action = 1, 1, 11
+        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
+            girl.dir, girl.face_dir, girl.action = -1, -1, 9
+
     @staticmethod
     def exit(girl, e):
         pass
@@ -39,13 +45,13 @@ class Run:
 
     @staticmethod
     def do(girl):
-        girl.frame = (girl.frame + 1) % 8
-        girl.x += girl.dir * 5
+        girl.frame = (girl.frame + 1) % 4
+        girl.x += girl.dir * 2
         pass
 
     @staticmethod
     def draw(girl):
-        girl.image.clip_draw(girl.frame * 100, girl.action * 100, 100, 100, girl.x, girl.y)
+        girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 16 * 3, 32 * 3)
 
 
 
