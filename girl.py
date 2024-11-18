@@ -1,18 +1,16 @@
 from pico2d import load_image
-
-from mouse import handle_mouse_events
 from state_machine import *
 import mouse
 
 class Idle:
     @staticmethod
     def enter(girl, e):
-        if start_event(e) or up_down(e) or down_up(e):  # 뒤
+        if start_event(e) or up_down(e) or down_up(e):  # 앞
             girl.action = 12
-            girl.yface_dir = -1
-        elif down_down(e) or up_up(e): # 앞
-            girl.action = 10
             girl.yface_dir = 1
+        elif down_down(e) or up_up(e): # 뒤
+            girl.action = 10
+            girl.yface_dir = -1
         elif right_down(e) or left_up(e): # 왼쪽
             girl.action = 9
             girl.xface_dir = -1
@@ -43,9 +41,9 @@ class Run:
         elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
             girl.dir, girl.xface_dir, girl.yface_dir, girl.action = -1, -1, 0, 9
         elif down_down(e) or up_up(e): # 아래로 RUN
-            girl.dir, girl.xface_dir, girl.yface_dir, girl.action = -1, 0, 1, 12
+            girl.dir, girl.xface_dir, girl.yface_dir, girl.action = -1, 0, -1, 12
         elif up_down(e) or down_up(e): # 위로 RUN
-            girl.dir, girl.xface_dir, girl.yface_dir, girl.action = 1, 0, -1, 10
+            girl.dir, girl.xface_dir, girl.yface_dir, girl.action = 1, 0, 1, 10
 
     @staticmethod
     def exit(girl, e):
@@ -54,13 +52,17 @@ class Run:
 
     @staticmethod
     def do(girl):
-        girl.frame = (girl.frame + 1) % 4
+        girl.frame_time_accumulator += 1
+        if girl.frame_time_accumulator >= girl.frame_time_update_interval:
+            girl.frame = (girl.frame + 1) % 4
+            girl.frame_time_accumulator = 0
+
         if girl.yface_dir == 0:
             if 0 < girl.x + girl.dir * 2 < 800:
-                girl.x += girl.dir * 2
+                girl.x += girl.dir * 0.5
         elif girl.xface_dir == 0:
             if 140 < girl.y + girl.dir * 2 < 400:
-                girl.y += girl.dir * 2
+                girl.y += girl.dir * 0.5
         pass
 
     @staticmethod
@@ -73,6 +75,8 @@ class Girl:
     def __init__(self):
         self.x, self.y = 400, 300
         self.xface_dir, self.yface_dir = 1, 1
+        self.frame_time_accumulator = 0 # 누적 시간
+        self.frame_time_update_interval = 30 # 프레임 업데이트 간격
         self.image = load_image('Haley.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
