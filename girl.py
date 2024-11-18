@@ -1,4 +1,7 @@
 from pico2d import load_image, draw_rectangle
+
+import game_world
+from hoeDirt import hoeDirt
 from state_machine import *
 import mouse
 
@@ -22,6 +25,8 @@ class Idle:
 
     @staticmethod
     def exit(girl, e):
+        if Lclick_up(e):
+            girl.hoeDirt()
         pass
 
     @staticmethod
@@ -82,7 +87,7 @@ class Girl:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {down_down: Run, up_down: Run, down_up: Run, up_up: Run, right_down: Run, left_down: Run, left_up: Run, right_up: Run},
+                Idle: {down_down: Run, up_down: Run, down_up: Run, up_up: Run, right_down: Run, left_down: Run, left_up: Run, right_up: Run, Lclick_up:Idle},
                 Run: {down_down: Idle, up_down: Idle, down_up: Idle, up_up: Idle, right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
             }
         )
@@ -102,3 +107,7 @@ class Girl:
 
     def get_bb(self):
         return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
+
+    def hoeDirt(self):
+        hoedirt = hoeDirt(self.x, self.y, self.xface_dir, self.yface_dir)
+        game_world.add_object(hoedirt)
