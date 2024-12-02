@@ -10,12 +10,12 @@ class Hoe:
         self.x, self.y, self.xface_dir, self.yface_dir = x, y, xface_dir, yface_dir
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.image.clip_draw(0, 50, 15, 15, self.x, self.y, 50, 50)
         draw_rectangle(*self.get_bb())
 
     def update(self):
         pass
 
     def get_bb(self):
-        return self.x-10,self.y-10,self.x+10,self.y+10
+        return self.x-23,self.y-23,self.x+23,self.y+23
         pass

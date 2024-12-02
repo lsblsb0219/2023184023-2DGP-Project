@@ -108,20 +108,20 @@ class Girl:
 
     def select_item(self):
         if self.xface_dir == 0:
-            if self.yface_dir == -1:
+            if self.yface_dir == -1: # 위쪽
                 if self.item == 'Hoe':
                     select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
                     game_world.add_object(select_item)
-            elif self.yface_dir == 1:
+            elif self.yface_dir == 1: # 아래쪽(정면)
                 if self.item == 'Hoe':
-                    select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
+                    select_item = Hoe(self.x, self.y - 80, self.xface_dir, self.yface_dir)
                     game_world.add_object(select_item)
         elif self.yface_dir == 0:
-            if self.xface_dir == -1:
+            if self.xface_dir == -1: # 왼쪽
                 if self.item == 'Hoe':
                     select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
                     game_world.add_object(select_item)
-            elif self.xface_dir == 1:
+            elif self.xface_dir == 1: # 오른쪽
                 if self.item == 'Hoe':
                     select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
                     game_world.add_object(select_item)
