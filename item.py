@@ -1,12 +1,12 @@
 from pico2d import *
 
 
-class hoeDirt:
+class Hoe:
     image = None
 
     def __init__(self, x, y, xface_dir, yface_dir):
-        if hoeDirt.image == None:
-            hoeDirt.image = load_image('hoeDirt.png')
+        if Hoe.image == None:
+            Hoe.image = load_image('hoeDirt.png')
         self.x, self.y, self.xface_dir, self.yface_dir = x, y, xface_dir, yface_dir
 
     def draw(self):

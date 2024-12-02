@@ -1,9 +1,8 @@
 from pico2d import load_image, draw_rectangle
 
 import game_world
-from hoeDirt import hoeDirt
+from item import Hoe
 from state_machine import *
-import mouse
 
 class Idle:
     @staticmethod
@@ -25,8 +24,8 @@ class Idle:
 
     @staticmethod
     def exit(girl, e):
-        if Lclick_up(e):
-            girl.hoeDirt()
+        if click_l_down(e):
+            girl.select_item()
         pass
 
     @staticmethod
@@ -54,7 +53,6 @@ class Run:
     def exit(girl, e):
         pass
 
-
     @staticmethod
     def do(girl):
         girl.frame_time_accumulator += 1
@@ -75,7 +73,6 @@ class Run:
             girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 16 * 3, 32 * 3)
 
 
-
 class Girl:
     def __init__(self):
         self.x, self.y = 400, 300
@@ -87,10 +84,11 @@ class Girl:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {down_down: Run, up_down: Run, down_up: Run, up_up: Run, right_down: Run, left_down: Run, left_up: Run, right_up: Run, Lclick_up:Idle},
-                Run: {down_down: Idle, up_down: Idle, down_up: Idle, up_up: Idle, right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
+                Idle: {down_down: Run, up_down: Run, down_up: Run, up_up: Run, right_down: Run, left_down: Run, left_up: Run, right_up: Run, click_l_down:Idle},
+                Run: {down_down: Idle, up_down: Idle, down_up: Idle, up_up: Idle, right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
             }
         )
+        self.item = None
 
     def update(self):
         self.state_machine.update()
@@ -108,6 +106,22 @@ class Girl:
     def get_bb(self):
         return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
 
-    def hoeDirt(self):
-        hoedirt = hoeDirt(self.x, self.y, self.xface_dir, self.yface_dir)
-        game_world.add_object(hoedirt)
+    def select_item(self):
+        if self.xface_dir == 0:
+            if self.yface_dir == -1:
+                if self.item == 'Hoe':
+                    select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
+                    game_world.add_object(select_item)
+            elif self.yface_dir == 1:
+                if self.item == 'Hoe':
+                    select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
+                    game_world.add_object(select_item)
+        elif self.yface_dir == 0:
+            if self.xface_dir == -1:
+                if self.item == 'Hoe':
+                    select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
+                    game_world.add_object(select_item)
+            elif self.xface_dir == 1:
+                if self.item == 'Hoe':
+                    select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
+                    game_world.add_object(select_item)

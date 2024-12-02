@@ -2,6 +2,7 @@ import game_framework
 from pico2d import *
 
 import game_world
+import item_mode
 import title_mode
 from map import Ground
 from girl import Girl
@@ -22,6 +23,8 @@ def handle_events():
             game_framework.change_mode(title_mode)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.change_mode(title_mode)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
+            game_framework.push_mode(item_mode)
         else:
             girl.handle_event(event)
 
