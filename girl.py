@@ -4,6 +4,7 @@ import game_world
 import item
 from game_world import collide
 from item import Hoe
+from mouse import handle_mouse_events
 from state_machine import *
 
 class Idle:
@@ -95,7 +96,7 @@ class Girl:
 
     def update(self):
         self.state_machine.update()
-        # handle_mouse_events()
+        #handle_mouse_events()
 
     def handle_event(self, event):
         # 여기서 받을 수 있는 것만 걸러야 함. right left  등등..
@@ -122,6 +123,9 @@ class Girl:
                     self.hoes.append(hoe)
                     game_world.add_objects([select_item], 1)
                     game_world.add_collision_pair('hoe:hoe', hoe, None)
+                elif self.item == 'water':
+                    pass
+
             elif self.yface_dir == 1: # 아래쪽(정면)
                 if self.item == 'Hoe':
                     select_item = hoe = Hoe(self.x, self.y - 80, self.xface_dir, self.yface_dir)
@@ -133,6 +137,9 @@ class Girl:
                     self.hoes.append(hoe)
                     game_world.add_objects([select_item], 1)
                     game_world.add_collision_pair('hoe:hoe', hoe, None)
+                elif self.item == 'water':
+                    pass
+
         elif self.yface_dir == 0:
             if self.xface_dir == -1: # 왼쪽
                 if self.item == 'Hoe':
@@ -145,6 +152,9 @@ class Girl:
                     self.hoes.append(hoe)
                     game_world.add_objects([select_item], 1)
                     game_world.add_collision_pair('hoe:hoe', hoe, None)
+                elif self.item == 'water':
+                    pass
+
             elif self.xface_dir == 1: # 오른쪽
                 if self.item == 'Hoe':
                     select_item = hoe = Hoe(self.x + 40, self.y - 40, self.xface_dir, self.yface_dir)
@@ -156,5 +166,7 @@ class Girl:
                     self.hoes.append(hoe)
                     game_world.add_objects([select_item], 1)
                     game_world.add_collision_pair('hoe:hoe', hoe, None)
+                elif self.item == 'water':
+                    pass
 
         return self.hoes
