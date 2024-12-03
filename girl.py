@@ -96,7 +96,7 @@ class Girl:
 
     def update(self):
         self.state_machine.update()
-        #handle_mouse_events()
+        # handle_mouse_events()
 
     def handle_event(self, event):
         # 여기서 받을 수 있는 것만 걸러야 함. right left  등등..
@@ -170,3 +170,7 @@ class Girl:
                     pass
 
         return self.hoes
+
+    def handle_collision(self, group, other):
+        if group == 'girl:house':
+            pass
