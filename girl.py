@@ -1,6 +1,8 @@
 from pico2d import load_image, draw_rectangle
 
 import game_world
+import item
+from game_world import collide
 from item import Hoe
 from state_machine import *
 
@@ -89,6 +91,7 @@ class Girl:
             }
         )
         self.item = None
+        self.hoes = []
 
     def update(self):
         self.state_machine.update()
@@ -110,18 +113,48 @@ class Girl:
         if self.xface_dir == 0:
             if self.yface_dir == -1: # 위쪽
                 if self.item == 'Hoe':
-                    select_item = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
-                    game_world.add_object(select_item)
+                    select_item = hoe = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
+
+                    for existing_hoe in self.hoes:
+                        if collide(hoe, existing_hoe):
+                            return
+
+                    self.hoes.append(hoe)
+                    game_world.add_objects([select_item], 1)
+                    game_world.add_collision_pair('hoe:hoe', hoe, None)
             elif self.yface_dir == 1: # 아래쪽(정면)
                 if self.item == 'Hoe':
-                    select_item = Hoe(self.x, self.y - 80, self.xface_dir, self.yface_dir)
-                    game_world.add_object(select_item)
+                    select_item = hoe = Hoe(self.x, self.y - 80, self.xface_dir, self.yface_dir)
+
+                    for existing_hoe in self.hoes:
+                        if collide(hoe, existing_hoe):
+                            return
+
+                    self.hoes.append(hoe)
+                    game_world.add_objects([select_item], 1)
+                    game_world.add_collision_pair('hoe:hoe', hoe, None)
         elif self.yface_dir == 0:
             if self.xface_dir == -1: # 왼쪽
                 if self.item == 'Hoe':
-                    select_item = Hoe(self.x - 40, self.y - 40, self.xface_dir, self.yface_dir)
-                    game_world.add_object(select_item)
+                    select_item = hoe = Hoe(self.x - 40, self.y - 40, self.xface_dir, self.yface_dir)
+
+                    for existing_hoe in self.hoes:
+                        if collide(hoe, existing_hoe):
+                            return
+
+                    self.hoes.append(hoe)
+                    game_world.add_objects([select_item], 1)
+                    game_world.add_collision_pair('hoe:hoe', hoe, None)
             elif self.xface_dir == 1: # 오른쪽
                 if self.item == 'Hoe':
-                    select_item = Hoe(self.x + 40, self.y - 40, self.xface_dir, self.yface_dir)
-                    game_world.add_object(select_item)
+                    select_item = hoe = Hoe(self.x + 40, self.y - 40, self.xface_dir, self.yface_dir)
+
+                    for existing_hoe in self.hoes:
+                        if collide(hoe, existing_hoe):
+                            return
+
+                    self.hoes.append(hoe)
+                    game_world.add_objects([select_item], 1)
+                    game_world.add_collision_pair('hoe:hoe', hoe, None)
+
+        return self.hoes

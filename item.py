@@ -1,5 +1,7 @@
 from pico2d import *
 
+import game_world
+
 
 class Hoe:
     image = None
@@ -8,6 +10,7 @@ class Hoe:
         if Hoe.image == None:
             Hoe.image = load_image('hoeDirt.png')
         self.x, self.y, self.xface_dir, self.yface_dir = x, y, xface_dir, yface_dir
+
 
     def draw(self):
         self.image.clip_draw(0, 50, 15, 15, self.x, self.y, 50, 50)
@@ -19,3 +22,7 @@ class Hoe:
     def get_bb(self):
         return self.x-23,self.y-23,self.x+23,self.y+23
         pass
+
+    def handle_collision(self, group, other):
+        if group == 'hoe:hoe':
+            game_world.remove_object(self)

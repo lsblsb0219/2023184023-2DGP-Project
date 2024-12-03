@@ -4,6 +4,7 @@ from pico2d import *
 import game_world
 import item_mode
 import title_mode
+import item
 from map import Ground
 from girl import Girl
 
@@ -13,6 +14,11 @@ def init():
     game_world.add_object(map, 0)
     girl = Girl()
     game_world.add_object(girl, 1)
+
+    if girl.hoes: # 리스트가 비어있지 않다면
+        for hoe in girl.hoes:
+            game_world.add_collision_pair('hoe:hoe', None, hoe)
+
 
 def handle_events():
     global running
@@ -33,6 +39,8 @@ def finish():
 
 def update():
     game_world.update()
+    game_world.handle_collisions()
+
 
 def draw():
     clear_canvas()
