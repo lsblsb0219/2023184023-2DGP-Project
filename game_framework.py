@@ -54,3 +54,9 @@ def run(start_mode):
     while (len(stack) > 0):
         stack[-1].finish()
         stack.pop()
+
+def get_current_mode():
+    global stack
+    if len(stack) > 0:
+        return stack[-1]  # 스택의 가장 위에 있는 모드가 현재 실행 중인 모드
+    return None

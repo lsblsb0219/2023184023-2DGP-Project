@@ -1,3 +1,5 @@
+from map import House
+
 world = [[] for _ in range(4)]
 collision_pairs = {}
 
@@ -37,8 +39,10 @@ def remove_collision_object(o): # 충돌 객체 제거 함수
     pass
 
 def clear():
+    global collision_pairs
     for layer in world:
         layer.clear()
+    collision_pairs.clear()
 
 def remove_object(o):
     for layer in world:
@@ -63,10 +67,18 @@ def collide(a, b):
 
 
 def handle_collisions():
+    global collision_pairs
+
+    pairs_copy = collision_pairs.copy()
+
     # 게임월드에 등록된 충돌 정보를 바탕으로, 실제 충돌 검사를 수행.
-    for group, pairs in collision_pairs.items():
+    for group, pairs in pairs_copy.items():
         for a in pairs[0]: # A 리스트에서 하나 뽑고,
             for b in pairs[1]: # B 리스트에서 하나 뽑고,
+                if not (hasattr(a, 'get_bb') and hasattr(b, 'get_bb')):  # get_bb 메서드 확인
+                    continue
+                if not a.get_bb() or not b.get_bb():  # get_bb 결과 확인
+                    continue
                 if collide(a, b):
                     print(f'{group} collide')
                     a.handle_collision(group, b) # 충돌한 상대가 누군지 알려줌 -> b와 충돌했어

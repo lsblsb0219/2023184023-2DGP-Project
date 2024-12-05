@@ -1,7 +1,8 @@
 from pico2d import load_image, draw_rectangle
 
+import game_framework
 import game_world
-import item
+import play_mode
 from game_world import collide
 from item import Hoe
 from mouse import handle_mouse_events
@@ -64,10 +65,14 @@ class Run:
             girl.frame_time_accumulator = 0
 
         if girl.yface_dir == 0:
-            if 0 < girl.x + girl.dir * 2 < 800:
+            if 0 < girl.x + girl.dir * 2 < 800 and game_framework.get_current_mode() == play_mode:
+                girl.x += girl.dir * 0.5
+            elif game_framework.get_current_mode() != play_mode:
                 girl.x += girl.dir * 0.5
         elif girl.xface_dir == 0:
-            if 140 < girl.y + girl.dir * 2 < 400:
+            if 140 < girl.y + girl.dir * 2 < 400 and game_framework.get_current_mode() == play_mode:
+                girl.y += girl.dir * 0.5
+            elif game_framework.get_current_mode() != play_mode:
                 girl.y += girl.dir * 0.5
         pass
 
@@ -172,5 +177,10 @@ class Girl:
         return self.hoes
 
     def handle_collision(self, group, other):
+        import house_in_mode
+        import play_mode
         if group == 'girl:house':
+            game_framework.change_mode(house_in_mode)
+        if group == 'girl:houseIn':
+            game_framework.change_mode(play_mode)
             pass

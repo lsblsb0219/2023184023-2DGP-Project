@@ -1,30 +1,24 @@
-import game_framework
 from pico2d import *
 
+import game_framework
 import game_world
 import item_mode
+import play_mode
 import title_mode
-import item
-from map import Ground, House
 from girl import Girl
+from map import HouseIn
+
 
 def init():
     global girl
 
-    map = Ground()
+    map = HouseIn()
     game_world.add_object(map, 0)
 
-    girl = Girl()
+    girl = play_mode.girl
     game_world.add_object(girl, 1)
 
-    map2 = House()
-    game_world.add_object(map2, 0)
-
-    if girl.hoes: # 리스트가 비어있지 않다면
-        for hoe in girl.hoes:
-            game_world.add_collision_pair('hoe:hoe', None, hoe)
-
-    game_world.add_collision_pair('girl:house', girl, map2)
+    game_world.add_collision_pair('girl:houseIn', girl, map)
 
 def handle_events():
     global running
@@ -58,3 +52,4 @@ def pause():
 
 def resume():
     pass
+
