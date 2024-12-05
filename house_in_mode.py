@@ -15,8 +15,10 @@ def init():
     map = HouseIn()
     game_world.add_object(map, 0)
 
-    girl = play_mode.girl
+    girl = Girl()
     game_world.add_object(girl, 1)
+    girl.x = 300
+    girl.y = 100
 
     game_world.add_collision_pair('girl:houseIn', girl, map)
 
@@ -36,10 +38,17 @@ def handle_events():
 
 def finish():
     game_world.clear()
+    for layer in game_world.world:
+        if girl in layer:  # 해당 레이어에 girl 객체가 있으면
+            game_world.remove_object(girl)  # 삭제
+            break  # 삭제 후 루프 종료
 
 def update():
     game_world.update()
     game_world.handle_collisions()
+
+    if girl.x >= 290 and girl.x <= 310 and girl.y <= 90:
+        game_framework.change_mode(play_mode)
 
 
 def draw():

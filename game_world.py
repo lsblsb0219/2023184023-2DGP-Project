@@ -1,8 +1,5 @@
-from map import House
-
 world = [[] for _ in range(4)]
 collision_pairs = {}
-
 
 def add_collision_pair(group, a, b):
     if group not in collision_pairs:
@@ -27,7 +24,8 @@ def update():
 def render():
     for layer in world:
         for o in layer:
-            o.draw()
+            if o is not None:  # None 객체를 처리
+                o.draw()
 
 def remove_collision_object(o): # 충돌 객체 제거 함수
     for pairs in collision_pairs.values():

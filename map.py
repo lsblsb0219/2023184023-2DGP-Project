@@ -39,6 +39,7 @@ class House:
 
 class HouseIn:
     def __init__(self):
+        self.HouseIn_background = load_image('black.png')
         self.HouseIn_image = load_image('houseIn.png')
         self.x, self.y = 400, 300
 
@@ -46,6 +47,7 @@ class HouseIn:
         pass
 
     def draw(self):
+        self.HouseIn_background.draw(self.x, self.y)
         self.HouseIn_image.draw(self.x, self.y)
         # draw_rectangle(*self.get_bb())
         pass

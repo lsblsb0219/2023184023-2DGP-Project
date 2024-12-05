@@ -16,6 +16,8 @@ def init():
 
     girl = Girl()
     game_world.add_object(girl, 1)
+    girl.x = 133
+    girl.y = 380
 
     map2 = House()
     game_world.add_object(map2, 0)
@@ -42,6 +44,10 @@ def handle_events():
 
 def finish():
     game_world.clear()
+    for layer in game_world.world:
+        if girl in layer:  # 해당 레이어에 girl 객체가 있으면
+            game_world.remove_object(girl)  # 삭제
+            break  # 삭제 후 루프 종료
 
 def update():
     game_world.update()
