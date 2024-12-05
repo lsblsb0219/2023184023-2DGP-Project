@@ -1,30 +1,35 @@
-from pico2d import load_image, draw_rectangle
+import math
 
+from pico2d import load_image, draw_rectangle, clamp
 import game_framework
 import game_world
-import play_mode
+import server
 from game_world import collide
 from item import Hoe
 from mouse import handle_mouse_events
 from state_machine import *
 
+# Girl Run Speed
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 40.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# Girl Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
+
 class Idle:
     @staticmethod
     def enter(girl, e):
-        if start_event(e) or up_down(e) or down_up(e):  # 앞
-            girl.action = 12
-            girl.yface_dir = 1
-        elif down_down(e) or up_up(e): # 뒤
-            girl.action = 10
-            girl.yface_dir = -1
-        elif right_down(e) or left_up(e): # 왼쪽
-            girl.action = 9
-            girl.xface_dir = -1
-        elif left_down(e) or right_up(e): # 오른쪽
-            girl.action = 11
-            girl.xface_dir = 1
-
-        girl.frame = 0
+        if girl.action == 0:
+            girl.action = 2
+        elif girl.action == 1:
+            girl.action = 3
+        girl.speed = 0
+        girl.dir = 0
 
     @staticmethod
     def exit(girl, e):
@@ -38,20 +43,15 @@ class Idle:
 
     @staticmethod
     def draw(girl):
-        girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 16 * 3, 32 * 3)
+        girl.image.clip_draw(int(girl.frame * 16), int(girl.action * 32), 16, 32, int(girl.x), int(girl.y), 16 * 3, 32 * 3)
 
 
-class Run:
+class RunRight:
     @staticmethod
     def enter(girl, e):
-        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
-            girl.dir, girl.xface_dir, girl.yface_dir, girl.action = 1, 1, 0, 11
-        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
-            girl.dir, girl.xface_dir, girl.yface_dir, girl.action = -1, -1, 0, 9
-        elif down_down(e) or up_up(e): # 아래로 RUN
-            girl.dir, girl.xface_dir, girl.yface_dir, girl.action = -1, 0, -1, 12
-        elif up_down(e) or down_up(e): # 위로 RUN
-            girl.dir, girl.xface_dir, girl.yface_dir, girl.action = 1, 0, 1, 10
+        girl.action = 1
+        girl.speed = RUN_SPEED_PPS
+        girl.dir = 0
 
     @staticmethod
     def exit(girl, e):
@@ -59,32 +59,133 @@ class Run:
 
     @staticmethod
     def do(girl):
-        girl.frame_time_accumulator += 1
-        if girl.frame_time_accumulator >= girl.frame_time_update_interval:
-            girl.frame = (girl.frame + 1) % 4
-            girl.frame_time_accumulator = 0
+        pass
 
-        if girl.yface_dir == 0:
-            if 0 < girl.x + girl.dir * 2 < 800 and game_framework.get_current_mode() == play_mode:
-                girl.x += girl.dir * 0.5
-            elif game_framework.get_current_mode() != play_mode:
-                girl.x += girl.dir * 0.5
-        elif girl.xface_dir == 0:
-            if 140 < girl.y + girl.dir * 2 < 400 and game_framework.get_current_mode() == play_mode:
-                girl.y += girl.dir * 0.5
-            elif game_framework.get_current_mode() != play_mode:
-                girl.y += girl.dir * 0.5
+
+class RunRightUp:
+    @staticmethod
+    def enter(girl, e):
+        girl.action = 1
+        girl.speed = RUN_SPEED_PPS
+        girl.dir = math.pi / 4.0
+
+    @staticmethod
+    def exit(girl, e):
         pass
 
     @staticmethod
-    def draw(girl):
-            girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 16 * 3, 32 * 3)
+    def do(girl):
+        pass
+
+
+class RunRightDown:
+    @staticmethod
+    def enter(girl, e):
+        girl.action = 1
+        girl.speed = RUN_SPEED_PPS
+        girl.dir = -math.pi / 4.0
+
+    @staticmethod
+    def exit(girl, e):
+        pass
+
+    @staticmethod
+    def do(girl):
+        pass
+
+
+class RunLeft:
+    @staticmethod
+    def enter(girl, e):
+        girl.action = 0
+        girl.speed = RUN_SPEED_PPS
+        girl.dir = math.pi
+
+    @staticmethod
+    def exit(girl, e):
+        pass
+
+    @staticmethod
+    def do(girl):
+        pass
+
+
+class RunLeftUp:
+    @staticmethod
+    def enter(girl, e):
+        girl.action = 0
+        girl.speed = RUN_SPEED_PPS
+        girl.dir = math.pi * 3.0 / 4.0
+
+    @staticmethod
+    def exit(girl, e):
+        pass
+
+    @staticmethod
+    def do(girl):
+        pass
+
+
+class RunLeftDown:
+    @staticmethod
+    def enter(girl, e):
+        girl.action = 0
+        girl.speed = RUN_SPEED_PPS
+        girl.dir = - math.pi * 3.0 / 4.0
+
+    @staticmethod
+    def exit(girl, e):
+        pass
+
+    @staticmethod
+    def do(girl):
+        pass
+
+
+class RunUp:
+    @staticmethod
+    def enter(girl, e):
+        if girl.action == 2:
+            girl.action = 0
+        elif girl.action == 3:
+            girl.action = 1
+        girl.speed = RUN_SPEED_PPS
+        girl.dir = math.pi / 2.0
+
+    @staticmethod
+    def exit(girl, e):
+        pass
+
+    @staticmethod
+    def do(girl):
+        pass
+
+
+class RunDown:
+    @staticmethod
+    def enter(girl, e):
+        if girl.action == 2:
+            girl.action = 0
+        elif girl.action == 3:
+            girl.action = 1
+        girl.speed = RUN_SPEED_PPS
+        girl.dir = - math.pi / 2.0
+        pass
+
+    @staticmethod
+    def exit(girl, e):
+        pass
+
+    @staticmethod
+    def do(girl):
+        pass
 
 
 class Girl:
-    def __init__(self):
-        self.x, self.y = 400, 300
-        self.xface_dir, self.yface_dir = 1, 1
+    def __init__(self, x = 400, y = 300):
+        self.x, self.y = x, y
+        self.frame = 0
+        self.action = 3
         self.frame_time_accumulator = 0 # 누적 시간
         self.frame_time_update_interval = 30 # 프레임 업데이트 간격
         self.image = load_image('Haley.png')
@@ -92,15 +193,36 @@ class Girl:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {down_down: Run, up_down: Run, down_up: Run, up_up: Run, right_down: Run, left_down: Run, left_up: Run, right_up: Run, click_l_down:Idle},
-                Run: {down_down: Idle, up_down: Idle, down_up: Idle, up_up: Idle, right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
+                Idle: {right_down: RunRight, left_down: RunLeft, left_up: RunRight, right_up: RunLeft,
+                       upkey_down: RunUp, downkey_down: RunDown, upkey_up: RunDown, downkey_up: RunUp, click_l_down:Idle},
+                RunRight: {right_up: Idle, left_down: Idle, upkey_down: RunRightUp, upkey_up: RunRightDown,
+                           downkey_down: RunRightDown, downkey_up: RunRightUp},
+                RunRightUp: {upkey_up: RunRight, right_up: RunUp, left_down: RunUp, downkey_down: RunRight},
+                RunUp: {upkey_up: Idle, left_down: RunLeftUp, downkey_down: Idle, right_down: RunRightUp,
+                        left_up: RunRightUp, right_up: RunLeftUp},
+                RunLeftUp: {right_down: RunUp, downkey_down: RunLeft, left_up: RunUp, upkey_up: RunLeft},
+                RunLeft: {left_up: Idle, upkey_down: RunLeftUp, right_down: Idle, downkey_down: RunLeftDown,
+                          upkey_up: RunLeftDown, downkey_up: RunLeftUp},
+                RunLeftDown: {left_up: RunDown, downkey_up: RunLeft, upkey_down: RunLeft, right_down: RunDown},
+                RunDown: {downkey_up: Idle, left_down: RunLeftDown, upkey_down: Idle, right_down: RunRightDown,
+                          left_up: RunRightDown, right_up: RunLeftDown},
+                RunRightDown: {right_up: RunDown, downkey_up: RunRight, left_down: RunDown, upkey_down: RunRight}
             }
         )
+        self.frame = 4
+        self.action = 12
         self.item = None
         self.hoes = []
 
     def update(self):
         self.state_machine.update()
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+        self.x += math.cos(self.dir) * self.speed * game_framework.frame_time
+        self.y += math.sin(self.dir) * self.speed * game_framework.frame_time
+
+        self.x = clamp(50.0, self.x, server.map.w - 50.0)
+        self.y = clamp(50.0, self.y, server.map.h - 50.0)
+
         # handle_mouse_events()
 
     def handle_event(self, event):
@@ -109,6 +231,10 @@ class Girl:
         pass
 
     def draw(self):
+        sx = self.x - server.map.window_left
+        sy = self.y - server.map.window_bottom
+        self.image.clip_draw(int(self.frame) * 100, self.action * 100, 100, 100, sx, sy)
+
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
 
@@ -116,63 +242,61 @@ class Girl:
         return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
 
     def select_item(self):
-        if self.xface_dir == 0:
-            if self.yface_dir == -1: # 위쪽
-                if self.item == 'Hoe':
-                    select_item = hoe = Hoe(self.x, self.y, self.xface_dir, self.yface_dir)
+        if self.state_machine == RunUp:
+            if self.item == 'Hoe':
+                select_item = hoe = Hoe(self.x, self.y)
 
-                    for existing_hoe in self.hoes:
-                        if collide(hoe, existing_hoe):
-                            return
+                for existing_hoe in self.hoes:
+                    if collide(hoe, existing_hoe):
+                        return
 
-                    self.hoes.append(hoe)
-                    game_world.add_objects([select_item], 1)
-                    game_world.add_collision_pair('hoe:hoe', hoe, None)
-                elif self.item == 'water':
-                    pass
+                self.hoes.append(hoe)
+                game_world.add_objects([select_item], 1)
+                game_world.add_collision_pair('hoe:hoe', hoe, None)
+            elif self.item == 'water':
+                pass
 
-            elif self.yface_dir == 1: # 아래쪽(정면)
-                if self.item == 'Hoe':
-                    select_item = hoe = Hoe(self.x, self.y - 80, self.xface_dir, self.yface_dir)
+        elif self.state_machine == RunDown: # 아래쪽(정면)
+            if self.item == 'Hoe':
+                select_item = hoe = Hoe(self.x, self.y - 80)
 
-                    for existing_hoe in self.hoes:
-                        if collide(hoe, existing_hoe):
-                            return
+                for existing_hoe in self.hoes:
+                    if collide(hoe, existing_hoe):
+                        return
 
-                    self.hoes.append(hoe)
-                    game_world.add_objects([select_item], 1)
-                    game_world.add_collision_pair('hoe:hoe', hoe, None)
-                elif self.item == 'water':
-                    pass
+                self.hoes.append(hoe)
+                game_world.add_objects([select_item], 1)
+                game_world.add_collision_pair('hoe:hoe', hoe, None)
+            elif self.item == 'water':
+                pass
 
-        elif self.yface_dir == 0:
-            if self.xface_dir == -1: # 왼쪽
-                if self.item == 'Hoe':
-                    select_item = hoe = Hoe(self.x - 40, self.y - 40, self.xface_dir, self.yface_dir)
+        if self.state_machine == RunLeft: # 왼쪽
+            if self.item == 'Hoe':
+                select_item = hoe = Hoe(self.x - 40, self.y - 40)
 
-                    for existing_hoe in self.hoes:
-                        if collide(hoe, existing_hoe):
-                            return
+                for existing_hoe in self.hoes:
+                    if collide(hoe, existing_hoe):
+                        return
 
-                    self.hoes.append(hoe)
-                    game_world.add_objects([select_item], 1)
-                    game_world.add_collision_pair('hoe:hoe', hoe, None)
-                elif self.item == 'water':
-                    pass
+                self.hoes.append(hoe)
+                game_world.add_objects([select_item], 1)
+                game_world.add_collision_pair('hoe:hoe', hoe, None)
+            elif self.item == 'water':
+                pass
 
-            elif self.xface_dir == 1: # 오른쪽
-                if self.item == 'Hoe':
-                    select_item = hoe = Hoe(self.x + 40, self.y - 40, self.xface_dir, self.yface_dir)
+        elif self.state_machine == RunRight: # 오른쪽
+            if self.item == 'Hoe':
+                select_item = hoe = Hoe(self.x + 40, self.y - 40)
 
-                    for existing_hoe in self.hoes:
-                        if collide(hoe, existing_hoe):
-                            return
+                for existing_hoe in self.hoes:
+                    if collide(hoe, existing_hoe):
+                        return
 
-                    self.hoes.append(hoe)
-                    game_world.add_objects([select_item], 1)
-                    game_world.add_collision_pair('hoe:hoe', hoe, None)
-                elif self.item == 'water':
-                    pass
+                self.hoes.append(hoe)
+                game_world.add_objects([select_item], 1)
+                game_world.add_collision_pair('hoe:hoe', hoe, None)
+            elif self.item == 'water':
+                pass
 
         return self.hoes
 

@@ -1,6 +1,7 @@
 world = [[] for _ in range(4)]
 collision_pairs = {}
 
+
 def add_collision_pair(group, a, b):
     if group not in collision_pairs:
         collision_pairs[group] = [ [], [] ] # 리스트 초기화

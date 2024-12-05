@@ -6,10 +6,10 @@ import game_world
 class Hoe:
     image = None
 
-    def __init__(self, x, y, xface_dir, yface_dir):
+    def __init__(self, x, y):
         if Hoe.image == None:
             Hoe.image = load_image('hoeDirt.png')
-        self.x, self.y, self.xface_dir, self.yface_dir = x, y, xface_dir, yface_dir
+        self.x, self.y = x, y
 
 
     def draw(self):

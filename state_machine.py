@@ -1,5 +1,5 @@
 from sdl2 import (SDL_KEYDOWN, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_UP, SDLK_DOWN,
-                  SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, SDL_MOUSEBUTTONUP)
+                  SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT)
 
 
 def start_event(e):
@@ -17,16 +17,17 @@ def left_down(e):
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
-def up_down(e):
+
+def upkey_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
 
-def up_up(e):
+def upkey_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
 
-def down_down(e):
+def downkey_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
 
-def down_up(e):
+def downkey_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
 
 def click_l_down(e):
@@ -42,8 +43,6 @@ def time_out(e):
 
 class StateMachine:
     def __init__(self, o):
-        self.cur_state = None
-        self.transitions = None
         self.o = o
         self.event_que = []
 

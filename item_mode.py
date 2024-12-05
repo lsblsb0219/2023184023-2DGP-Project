@@ -4,15 +4,15 @@ from sdl2 import*
 
 import game_world
 import play_mode
-from pannel import Pannel
+import server
+
 
 def init():
-    global pannel
-    pannel = Pannel()
-    game_world.add_object(pannel, 3)
+    server.pannel = server.pannel()
+    game_world.add_object(server.pannel, 3)
 
 def finish():
-    game_world.remove_object(pannel)
+    game_world.remove_object(server.pannel)
 
 def update():
     pass
@@ -30,7 +30,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_1):
-            play_mode.girl.item= 'Hoe'
+            play_mode.server.girl.item= 'Hoe'
             game_framework.pop_mode()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_2):
             pass
