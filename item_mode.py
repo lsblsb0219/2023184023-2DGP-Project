@@ -4,15 +4,16 @@ from sdl2 import*
 
 import game_world
 import play_mode
-import server
+from pannel import Pannel
 
 
 def init():
-    server.pannel = server.pannel()
-    game_world.add_object(server.pannel, 3)
+    global pannel
+    pannel = Pannel()
+    game_world.add_object(pannel, 3)
 
 def finish():
-    game_world.remove_object(server.pannel)
+    game_world.remove_object(pannel)
 
 def update():
     pass

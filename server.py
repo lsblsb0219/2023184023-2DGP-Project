@@ -3,4 +3,3 @@
 girl = None
 map = None
 running = None
-pannel = None

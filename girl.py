@@ -1,6 +1,6 @@
 import math
 
-from pico2d import load_image, draw_rectangle, clamp
+from pico2d import load_image, draw_rectangle, clamp, load_font
 import game_framework
 import game_world
 import server
@@ -180,6 +180,7 @@ class Girl:
         self.frame_time_accumulator = 0 # 누적 시간
         self.frame_time_update_interval = 30 # 프레임 업데이트 간격
         self.image = load_image('Haley.png')
+        self.font = load_font('ENCR10B.TTF', 18)
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
@@ -230,12 +231,13 @@ class Girl:
         draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
                        x2 - server.map.window_left, y2 - server.map.window_bottom)
 
+        self.font.draw(sx - 100, sy + 60, f'({self.x:5.5}, {self.y:5.5})', (255, 255, 0))
 
     def get_bb(self):
         return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
 
     def select_item(self):
-        if self.state_machine == RunUp:
+        if self.action == 10: # 위쪽
             if self.item == 'Hoe':
                 select_item = hoe = Hoe(self.x, self.y)
 
@@ -249,7 +251,7 @@ class Girl:
             elif self.item == 'water':
                 pass
 
-        elif self.state_machine == RunDown: # 아래쪽(정면)
+        elif self.action == 12: # 아래쪽(정면)
             if self.item == 'Hoe':
                 select_item = hoe = Hoe(self.x, self.y - 80)
 
@@ -263,7 +265,7 @@ class Girl:
             elif self.item == 'water':
                 pass
 
-        if self.state_machine == RunLeft: # 왼쪽
+        if self.action == 9: # 왼쪽
             if self.item == 'Hoe':
                 select_item = hoe = Hoe(self.x - 40, self.y - 40)
 
@@ -277,7 +279,7 @@ class Girl:
             elif self.item == 'water':
                 pass
 
-        elif self.state_machine == RunRight: # 오른쪽
+        elif self.action == 11: # 오른쪽
             if self.item == 'Hoe':
                 select_item = hoe = Hoe(self.x + 40, self.y - 40)
 
