@@ -173,8 +173,9 @@ class RunDown:
 
 
 class Girl:
-    def __init__(self, x = 400, y = 300):
-        self.x, self.y = x, y
+    def __init__(self):
+        self.x = server.map.w / 2
+        self.y = server.map.h / 2
         self.frame = 0
         self.action = 3
         self.frame_time_accumulator = 0 # 누적 시간
@@ -209,6 +210,9 @@ class Girl:
     def update(self):
         self.state_machine.update()
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+        if self.state_machine.cur_state == Idle:
+            self.frame = 0
+
         self.x += math.cos(self.dir) * self.speed * game_framework.frame_time
         self.y += math.sin(self.dir) * self.speed * game_framework.frame_time
 

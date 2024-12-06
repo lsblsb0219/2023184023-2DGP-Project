@@ -13,7 +13,7 @@ def init():
     server.map = Ground()
     game_world.add_object(server.map, 0)
 
-    server.girl = Girl(server.map.w/2, server.map.h/2)
+    server.girl = Girl()
     game_world.add_object(server.girl, 1)
     server.girl.x = 133
     server.girl.y = 380
