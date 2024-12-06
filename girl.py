@@ -24,10 +24,7 @@ FRAMES_PER_ACTION = 8
 class Idle:
     @staticmethod
     def enter(girl, e):
-        if girl.action == 0:
-            girl.action = 2
-        elif girl.action == 1:
-            girl.action = 3
+        girl.frame = 0
         girl.speed = 0
         girl.dir = 0
 
@@ -49,7 +46,7 @@ class Idle:
 class RunRight:
     @staticmethod
     def enter(girl, e):
-        girl.action = 1
+        girl.action = 11
         girl.speed = RUN_SPEED_PPS
         girl.dir = 0
 
@@ -65,7 +62,7 @@ class RunRight:
 class RunRightUp:
     @staticmethod
     def enter(girl, e):
-        girl.action = 1
+        girl.action = 11
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi / 4.0
 
@@ -81,7 +78,7 @@ class RunRightUp:
 class RunRightDown:
     @staticmethod
     def enter(girl, e):
-        girl.action = 1
+        girl.action = 11
         girl.speed = RUN_SPEED_PPS
         girl.dir = -math.pi / 4.0
 
@@ -97,7 +94,7 @@ class RunRightDown:
 class RunLeft:
     @staticmethod
     def enter(girl, e):
-        girl.action = 0
+        girl.action = 9
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi
 
@@ -113,7 +110,7 @@ class RunLeft:
 class RunLeftUp:
     @staticmethod
     def enter(girl, e):
-        girl.action = 0
+        girl.action = 9
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi * 3.0 / 4.0
 
@@ -129,7 +126,7 @@ class RunLeftUp:
 class RunLeftDown:
     @staticmethod
     def enter(girl, e):
-        girl.action = 0
+        girl.action = 9
         girl.speed = RUN_SPEED_PPS
         girl.dir = - math.pi * 3.0 / 4.0
 
@@ -145,10 +142,7 @@ class RunLeftDown:
 class RunUp:
     @staticmethod
     def enter(girl, e):
-        if girl.action == 2:
-            girl.action = 0
-        elif girl.action == 3:
-            girl.action = 1
+        girl.action = 10
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi / 2.0
 
@@ -164,10 +158,7 @@ class RunUp:
 class RunDown:
     @staticmethod
     def enter(girl, e):
-        if girl.action == 2:
-            girl.action = 0
-        elif girl.action == 3:
-            girl.action = 1
+        girl.action = 12
         girl.speed = RUN_SPEED_PPS
         girl.dir = - math.pi / 2.0
         pass
@@ -233,10 +224,12 @@ class Girl:
     def draw(self):
         sx = self.x - server.map.window_left
         sy = self.y - server.map.window_bottom
-        self.image.clip_draw(int(self.frame) * 100, self.action * 100, 100, 100, sx, sy)
+        self.image.clip_draw(int(self.frame) * 16, self.action * 32, 16, 32, sx, sy, 16 * 3, 32 * 3)
 
-        self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
+        x1, y1, x2, y2 = self.get_bb()
+        draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
+                       x2 - server.map.window_left, y2 - server.map.window_bottom)
+
 
     def get_bb(self):
         return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
