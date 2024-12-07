@@ -1,4 +1,5 @@
 from pico2d import load_image, draw_rectangle, get_canvas_width, get_canvas_height, clamp
+
 import server
 
 class Ground:
@@ -69,6 +70,7 @@ class HouseIn:
     def update(self):
         self.window_left = clamp(0, int(server.girl.x) - self.cw // 2, self.w - self.cw - 1)
         self.window_bottom = clamp(0, int(server.girl.y) - self.ch // 2, self.h - self.ch - 1)
+
         pass
 
     def draw(self):
@@ -76,8 +78,28 @@ class HouseIn:
         self.HouseIn_image.draw(self.x, self.y)
         pass
 
-    def get_bb(self):
+
+
+class Door:
+    def __init__(self):
+        self.image = load_image('black.png')
+        self.x = 300
+        self.y = 20
+
+    def update(self):
         pass
 
-    def handle_collision(self, group, other):
+    def draw(self):
+        self.image.draw(self.x, self.y, 10, 10)
+        x1, y1, x2, y2 = self.get_bb()
+        draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
+                       x2 - server.map.window_left, y2 - server.map.window_bottom)
+
         pass
+
+    def get_bb(self):
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+
+    def handle_collision(self, group, other):
+        if group == 'girl:door':
+            pass

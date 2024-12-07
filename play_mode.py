@@ -13,7 +13,8 @@ def init():
     server.map = Ground()
     game_world.add_object(server.map, 0)
 
-    server.girl = Girl()
+    if not hasattr(server, 'girl') or server.girl is None:
+            server.girl = Girl()
     game_world.add_object(server.girl, 1)
     server.girl.x = 133
     server.girl.y = 380
@@ -41,10 +42,7 @@ def handle_events():
 
 def finish():
     game_world.clear()
-    for layer in game_world.world:
-        if server.girl in layer:  # 해당 레이어에 girl 객체가 있으면
-            game_world.remove_object(server.girl)  # 삭제
-            break  # 삭제 후 루프 종료
+
 
 def update():
     game_world.update()

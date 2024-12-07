@@ -3,9 +3,8 @@ from pico2d import *
 import game_framework
 import game_world
 import item_mode
-import play_mode
 import title_mode
-from map import HouseIn
+from map import HouseIn, Door
 import server
 
 
@@ -16,6 +15,11 @@ def init():
     game_world.add_object(server.girl, 1)
     server.girl.x = 300
     server.girl.y = 100
+
+    door = Door()
+    game_world.add_object(door, 0)
+
+    game_world.add_collision_pair('girl:door', server.girl, door)
 
 
 def handle_events():
@@ -32,17 +36,13 @@ def handle_events():
 
 def finish():
     game_world.clear()
-    for layer in game_world.world:
-        if server.girl in layer:  # 해당 레이어에 server.girl 객체가 있으면
-            game_world.remove_object(server.girl)  # 삭제
-            break  # 삭제 후 루프 종료
+
 
 def update():
     game_world.update()
     game_world.handle_collisions()
 
-    if server.girl.x >= 290 and server.girl.x <= 310 and server.girl.y <= 90:
-        game_framework.change_mode(play_mode)
+
 
 
 def draw():

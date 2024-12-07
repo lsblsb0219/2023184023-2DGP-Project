@@ -206,7 +206,6 @@ class Girl:
         self.action = 12
         self.item = None
         self.hoes = []
-        self.sx, self.sy = 0, 0
 
     def update(self):
         self.state_machine.update()
@@ -313,6 +312,5 @@ class Girl:
         import play_mode
         if group == 'girl:house':
             game_framework.change_mode(house_in_mode)
-        if group == 'girl:houseIn':
+        if group == 'girl:door':
             game_framework.change_mode(play_mode)
-            pass
