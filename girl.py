@@ -250,6 +250,26 @@ class Girl:
         return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
 
     def select_item(self):
+        if self.item == 'Water':
+            if not self.hoes:
+                return
+
+            water_x, water_y = self.x, self.y
+
+            for existing_hoe in self.hoes:
+                if collide(self, existing_hoe):  # 충돌하는 Hoe를 찾음
+                    water_x, water_y = existing_hoe.x, existing_hoe.y  # Hoe의 좌표 사용
+                    break
+
+            select_item = water = Water(water_x, water_y)
+            for existing_water in self.waters:
+                if collide(water, existing_water):
+                    return
+
+            self.waters.append(water)
+            game_world.add_objects([select_item], 1)
+            game_world.add_collision_pair('water:water', water, None)
+
         if self.action == 10: # 위쪽
             if self.item == 'Hoe':
                 select_item = hoe = Hoe(self.x, self.y)
@@ -261,26 +281,6 @@ class Girl:
                 self.hoes.append(hoe)
                 game_world.add_objects([select_item], 1)
                 game_world.add_collision_pair('hoe:hoe', hoe, None)
-            elif self.item == 'Water':
-                if not self.hoes:
-                    return
-
-                water_x, water_y = self.x, self.y
-
-                for existing_hoe in self.hoes:
-                    if collide(self, existing_hoe):  # 충돌하는 Hoe를 찾음
-                        water_x, water_y = existing_hoe.x, existing_hoe.y  # Hoe의 좌표 사용
-                        break
-
-                select_item = water = Water(water_x, water_y)
-                for existing_water in self.waters:
-                    if collide(water, existing_water):
-                        return
-
-                self.hoes.append(water)
-                game_world.add_objects([select_item], 1)
-                game_world.add_collision_pair('water:water', water, None)
-
                 pass
 
         elif self.action == 12: # 아래쪽(정면)
@@ -294,17 +294,6 @@ class Girl:
                 self.hoes.append(hoe)
                 game_world.add_objects([select_item], 1)
                 game_world.add_collision_pair('hoe:hoe', hoe, None)
-            elif self.item == 'Water':
-                select_item = water = Water(self.x, self.y)
-
-                for existing_water in self.waters:
-                    if collide(water, existing_water):
-                        return
-
-                self.hoes.append(water)
-                game_world.add_objects([select_item], 1)
-                game_world.add_collision_pair('water:water', water, None)
-
                 pass
 
         if self.action == 9: # 왼쪽
@@ -318,16 +307,6 @@ class Girl:
                 self.hoes.append(hoe)
                 game_world.add_objects([select_item], 1)
                 game_world.add_collision_pair('hoe:hoe', hoe, None)
-            elif self.item == 'Water':
-                select_item = water = Water(self.x, self.y)
-
-                for existing_water in self.waters:
-                    if collide(water, existing_water):
-                        return
-
-                self.hoes.append(water)
-                game_world.add_objects([select_item], 1)
-                game_world.add_collision_pair('water:water', water, None)
 
                 pass
 
@@ -342,17 +321,6 @@ class Girl:
                 self.hoes.append(hoe)
                 game_world.add_objects([select_item], 1)
                 game_world.add_collision_pair('hoe:hoe', hoe, None)
-            elif self.item == 'Water':
-                select_item = water = Water(self.x, self.y)
-
-                for existing_water in self.waters:
-                    if collide(water, existing_water):
-                        return
-
-                self.hoes.append(water)
-                game_world.add_objects([select_item], 1)
-                game_world.add_collision_pair('water:water', water, None)
-
                 pass
 
         return self.hoes
