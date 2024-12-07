@@ -55,5 +55,27 @@ class Water:
     def handle_collision(self, group, other):
         if group == 'water:water':
             game_world.remove_object(self)
-        if group == 'hoe:water':
+
+
+class Seed:
+    image = None
+
+    def __init__(self, x, y):
+        if Seed.image == None:
+            Seed.image = load_image('resource/crops.png')
+        self.x, self.y = x, y
+
+    def draw(self):
+        self.image.clip_draw(0, 1024 - 45, 18, 40, self.x, self.y, 18 * 2, 40 * 2)
+        draw_rectangle(*self.get_bb())
+
+    def update(self):
+        pass
+
+    def get_bb(self):
+        return self.x - 23, self.y - 23, self.x + 23, self.y + 23
+        pass
+
+    def handle_collision(self, group, other):
+        if group == 'seed:seed':
             pass

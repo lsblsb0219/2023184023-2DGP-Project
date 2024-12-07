@@ -5,7 +5,7 @@ import game_framework
 import game_world
 import server
 from game_world import collide
-from item import Hoe, Water
+from item import Hoe, Water, Seed
 from mouse import handle_mouse_events
 from state_machine import *
 
@@ -207,6 +207,7 @@ class Girl:
         self.item = None
         self.hoes = []
         self.waters = []
+        self.seeds = []
 
     def update(self):
         self.state_machine.update()
@@ -258,7 +259,8 @@ class Girl:
 
             for existing_hoe in self.hoes:
                 if collide(self, existing_hoe):  # 충돌하는 Hoe를 찾음
-                    water_x, water_y = existing_hoe.x, existing_hoe.y  # Hoe의 좌표 사용
+                    water_x, water_y = existing_hoe.x, existing_hoe.y
+                    self.hoes.remove(existing_hoe)
                     break
 
             select_item = water = Water(water_x, water_y)
@@ -269,6 +271,33 @@ class Girl:
             self.waters.append(water)
             game_world.add_objects([select_item], 1)
             game_world.add_collision_pair('water:water', water, None)
+
+        if  self.item == 'Seed':
+            if not self.hoes and not self.waters:
+                return
+
+            seed_x, seed_y = self.x, self.y
+
+            for existing_hoe in self.hoes:
+                if collide(self, existing_hoe):
+                    seed_x, seed_y = existing_hoe.x, existing_hoe.y
+                    break
+
+            for existing_water in self.waters:
+                if collide(self, existing_water):
+                    seed_x, seed_y = existing_water.x, existing_water.y
+                    break
+
+            select_item = seed = Seed(seed_x, seed_y)
+
+            for existing_seed in self.seeds:
+                if collide(seed, existing_seed):
+                    return
+
+            self.seeds.append(seed)
+            game_world.add_objects([select_item], 2)
+            game_world.add_collision_pair('seed:seed', seed, None)
+
 
         if self.action == 10: # 위쪽
             if self.item == 'Hoe':

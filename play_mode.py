@@ -25,9 +25,14 @@ def init():
     if server.girl.hoes: # 리스트가 비어있지 않다면
         for hoe in server.girl.hoes:
             game_world.add_collision_pair('hoe:hoe', None, hoe)
+
         if server.girl.waters:  # 리스트가 비어있지 않다면
             for water in server.girl.waters:
                 game_world.add_collision_pair('water:water', None, water)
+
+    if server.girl.seeds:
+        for seed in server.girl.seeds:
+            game_world.add_collision_pair('seed:seed', None, seed)
 
     game_world.add_collision_pair('girl:house', server.girl, map2)
 
