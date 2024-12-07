@@ -8,8 +8,12 @@ import title_mode
 
 from map import Ground, House
 from girl import Girl
+from music import Music
 
 def init():
+    server.music = Music()
+    server.music.init()
+
     server.map = Ground()
     game_world.add_object(server.map, 0)
 
@@ -49,6 +53,8 @@ def handle_events():
             server.girl.handle_event(event)
 
 def finish():
+    if server.music:
+        server.music.finish()
     game_world.clear()
 
 
@@ -63,7 +69,11 @@ def draw():
     update_canvas()
 
 def pause():
+    if server.music:
+        server.music.finish()
     pass
 
 def resume():
+    if server.music:
+        server.music.resume()
     pass

@@ -1,16 +1,22 @@
 import game_framework
 from pico2d import*
 
+import server
 import play_mode
 
+from music import Music
 
 def init():
     global image
     image = load_image('resource/title.png')
+    server.music = Music()
+    server.music.init()
 
 def finish():
     global image
     del image
+    if server.music:
+        server.music.finish()
 
 def update():
     pass
@@ -31,7 +37,11 @@ def handle_events():
             game_framework.change_mode(play_mode)
 
 def pause():
+    if server.music:
+        server.music.finish()
     pass
 
 def resume():
+    if server.music:
+        server.music.resume()
     pass

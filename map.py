@@ -1,4 +1,4 @@
-from pico2d import load_image, draw_rectangle, get_canvas_width, get_canvas_height, clamp
+from pico2d import load_image, draw_rectangle, get_canvas_width, get_canvas_height, clamp, load_music
 
 import server
 

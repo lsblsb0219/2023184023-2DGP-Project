@@ -3,3 +3,4 @@
 girl = None
 map = None
 running = None
+music = None

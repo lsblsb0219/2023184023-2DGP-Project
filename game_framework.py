@@ -69,3 +69,5 @@ def get_current_mode():
     if len(stack) > 0:
         return stack[-1]  # 스택의 가장 위에 있는 모드가 현재 실행 중인 모드
     return None
+
+
