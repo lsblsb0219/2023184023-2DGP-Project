@@ -34,6 +34,9 @@ def handle_events():
             play_mode.server.girl.item= 'Hoe'
             game_framework.pop_mode()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_2):
+            play_mode.server.girl.item = 'Water'
+            game_framework.pop_mode()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_3):
             pass
 
 def pause():
