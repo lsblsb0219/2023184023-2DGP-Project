@@ -5,8 +5,8 @@ import server
 class Ground:
     # 생성자를 이용해서 객체의 초기 상태를 정의상태 정의
     def __init__(self):
-        self.Ground_image = load_image('ground.png')
-        self.Sky_image = load_image('sky.png')
+        self.Ground_image = load_image('resource/ground.png')
+        self.Sky_image = load_image('resource/sky.png')
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
         self.w = self.cw
@@ -26,7 +26,7 @@ class Ground:
 
 class House:
     def __init__(self):
-        self.House_image = load_image('houses.png')
+        self.House_image = load_image('resource/houses.png')
         self.x, self.y = 200, 480
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
@@ -57,8 +57,8 @@ class House:
 
 class HouseIn:
     def __init__(self):
-        self.HouseIn_background = load_image('black.png')
-        self.HouseIn_image = load_image('houseIn.png')
+        self.HouseIn_background = load_image('resource/black.png')
+        self.HouseIn_image = load_image('resource/houseIn.png')
         self.x, self.y = 400, 300
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
@@ -82,7 +82,7 @@ class HouseIn:
 
 class Door:
     def __init__(self):
-        self.image = load_image('black.png')
+        self.image = load_image('resource/black.png')
         self.x = 300
         self.y = 20
 

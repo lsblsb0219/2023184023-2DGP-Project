@@ -180,8 +180,8 @@ class Girl:
         self.action = 3
         self.frame_time_accumulator = 0 # 누적 시간
         self.frame_time_update_interval = 30 # 프레임 업데이트 간격
-        self.image = load_image('Haley.png')
-        self.font = load_font('ENCR10B.TTF', 18)
+        self.image = load_image('resource/Haley.png')
+        self.font = load_font('resource/ENCR10B.TTF', 18)
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(

@@ -8,7 +8,7 @@ class Hoe:
 
     def __init__(self, x, y):
         if Hoe.image == None:
-            Hoe.image = load_image('hoeDirt.png')
+            Hoe.image = load_image('resource/hoeDirt.png')
         self.x, self.y = x, y
 
 
@@ -26,3 +26,5 @@ class Hoe:
     def handle_collision(self, group, other):
         if group == 'hoe:hoe':
             game_world.remove_object(self)
+
+
