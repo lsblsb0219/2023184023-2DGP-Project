@@ -8,8 +8,10 @@ class Ground:
         self.Sky_image = load_image('sky.png')
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
-        self.w = self.Ground_image.w
-        self.h = self.Ground_image.h
+        self.w = self.cw
+        self.h = self.ch
+        self.window_left = 0
+        self.window_bottom = 0
 
     def update(self):
         self.window_left = clamp(0, int(server.girl.x) - self.cw // 2, self.w - self.cw - 1)
@@ -29,6 +31,8 @@ class House:
         self.ch = get_canvas_height()
         self.w = self.House_image.w
         self.h = self.House_image.h
+        self.window_left = 0
+        self.window_bottom = 0
 
     def update(self):
         self.window_left = clamp(0, int(server.girl.x) - self.cw // 2, self.w - self.cw - 1)
@@ -57,8 +61,10 @@ class HouseIn:
         self.x, self.y = 400, 300
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
-        self.w = self.HouseIn_image.w
-        self.h = self.HouseIn_image.h
+        self.w = self.cw
+        self.h = self.ch
+        self.window_left = 0
+        self.window_bottom = 0
 
     def update(self):
         self.window_left = clamp(0, int(server.girl.x) - self.cw // 2, self.w - self.cw - 1)

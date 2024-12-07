@@ -13,13 +13,10 @@ def init():
     server.map = HouseIn()
     game_world.add_object(server.map, 0)
 
-  
-    server.girl = server.girl(server.map.w/2, server.map.h/2)
     game_world.add_object(server.girl, 1)
     server.girl.x = 300
     server.girl.y = 100
 
-    game_world.add_collision_pair('server.girl:houseIn', server.girl, map)
 
 def handle_events():
     events = get_events()

@@ -206,6 +206,7 @@ class Girl:
         self.action = 12
         self.item = None
         self.hoes = []
+        self.sx, self.sy = 0, 0
 
     def update(self):
         self.state_machine.update()
@@ -216,8 +217,15 @@ class Girl:
         self.x += math.cos(self.dir) * self.speed * game_framework.frame_time
         self.y += math.sin(self.dir) * self.speed * game_framework.frame_time
 
-        self.x = clamp(50.0, self.x, server.map.w - 50.0)
-        self.y = clamp(50.0, self.y, server.map.h - 50.0)
+        self.x = clamp(
+            10.0,
+            self.x,
+            server.map.w - 25.0
+        )
+        self.y = clamp(
+            30.0,
+            self.y,
+            server.map.h - 0.0)
 
         # handle_mouse_events()
 
@@ -227,15 +235,16 @@ class Girl:
         pass
 
     def draw(self):
-        sx = self.x - server.map.window_left
-        sy = self.y - server.map.window_bottom
-        self.image.clip_draw(int(self.frame) * 16, self.action * 32, 16, 32, sx, sy, 16 * 3, 32 * 3)
+        self.sx = self.x - server.map.window_left
+        self.sy = self.y - server.map.window_bottom
+
+        self.image.clip_draw(int(self.frame) * 16, self.action * 32, 16, 32, self.sx, self.sy, 16 * 3, 32 * 3)
 
         x1, y1, x2, y2 = self.get_bb()
         draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
                        x2 - server.map.window_left, y2 - server.map.window_bottom)
 
-        self.font.draw(sx - 100, sy + 60, f'({self.x:5.5}, {self.y:5.5})', (255, 255, 0))
+        self.font.draw(self.sx - 100, self.sy + 60, f'({self.sx:.2f}, {self.sy:.2f})', (255, 255, 0))
 
     def get_bb(self):
         return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
