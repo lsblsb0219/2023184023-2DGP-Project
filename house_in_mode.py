@@ -35,6 +35,8 @@ def handle_events():
             game_framework.change_mode(title_mode)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
             game_framework.push_mode(item_mode)
+            if server.music:
+                server.music.init()
         else:
             server.girl.handle_event(event)
 
