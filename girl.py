@@ -7,6 +7,7 @@ import server
 from game_world import collide
 from item import Hoe, Water, Seed
 from mouse import handle_mouse_events
+from sound import SoundManager
 from state_machine import *
 
 # Girl Run Speed
@@ -174,6 +175,7 @@ class RunDown:
 
 class Girl:
     def __init__(self):
+        self.sound_manager = SoundManager()
         self.x = server.map.w / 2
         self.y = server.map.h / 2
         self.frame = 0
@@ -233,6 +235,8 @@ class Girl:
     def handle_event(self, event):
         # 여기서 받을 수 있는 것만 걸러야 함. right left  등등..
         self.state_machine.add_event(('INPUT', event))
+        if self.item is not None and event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
+            self.sound_manager.play_item_sound(self.item)
         pass
 
     def draw(self):
