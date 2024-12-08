@@ -257,14 +257,14 @@ class Girl:
     def save_state(self):
         saved_hoes = [(hoe.x, hoe.y) for hoe in self.hoes]
         saved_waters = [(water.x, water.y) for water in self.waters]
-        saved_seeds = [(seed.x, seed.y) for seed in self.seeds]
+        saved_seeds = [(seed.x, seed.y, seed.created_day) for seed in self.seeds]
         return saved_hoes, saved_waters, saved_seeds
 
     # 상태 복원 함수
     def restore_state(self, saved_hoes, saved_waters, saved_seeds):
         self.hoes = [Hoe(x, y) for x, y in saved_hoes]
         self.waters = [Water(x, y) for x, y in saved_waters]
-        self.seeds = [Seed(x, y) for x, y in saved_seeds]
+        self.seeds = [Seed(x, y, created_day) for x, y, created_day in saved_seeds]
 
     def select_item(self):
         if self.item == 'Water':
@@ -304,7 +304,7 @@ class Girl:
                     seed_x, seed_y = existing_water.x, existing_water.y
                     break
 
-            select_item = seed = Seed(seed_x, seed_y)
+            select_item = seed = Seed(seed_x, seed_y, server.game_day)
 
             for existing_seed in self.seeds:
                 if collide(seed, existing_seed):
