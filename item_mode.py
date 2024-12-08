@@ -1,3 +1,4 @@
+import day_time
 import game_framework
 from pico2d import*
 from sdl2 import*
@@ -16,11 +17,13 @@ def finish():
     game_world.remove_object(pannel)
 
 def update():
+    day_time.update_time()
     pass
 
 def draw():
     clear_canvas()
     game_world.render()
+    day_time.draw_time()
     update_canvas()
 
 def handle_events():

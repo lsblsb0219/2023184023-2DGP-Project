@@ -4,3 +4,4 @@ girl = None
 map = None
 running = None
 music = None
+frame_time = 0

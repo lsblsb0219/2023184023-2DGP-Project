@@ -1,5 +1,6 @@
 from pico2d import *
 
+import day_time
 import game_framework
 import game_world
 import item_mode
@@ -48,6 +49,7 @@ def finish():
 
 def update():
     game_world.update()
+    day_time.update_time()
     game_world.handle_collisions()
 
 
@@ -56,6 +58,7 @@ def update():
 def draw():
     clear_canvas()
     game_world.render()
+    day_time.draw_time()
     update_canvas()
 
 def pause():

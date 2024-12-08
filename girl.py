@@ -213,12 +213,12 @@ class Girl:
 
     def update(self):
         self.state_machine.update()
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * server.frame_time) % 4
         if self.state_machine.cur_state == Idle:
             self.frame = 0
 
-        self.x += math.cos(self.dir) * self.speed * game_framework.frame_time
-        self.y += math.sin(self.dir) * self.speed * game_framework.frame_time
+        self.x += math.cos(self.dir) * self.speed * server.frame_time
+        self.y += math.sin(self.dir) * self.speed * server.frame_time
 
         self.x = clamp(
             10.0,

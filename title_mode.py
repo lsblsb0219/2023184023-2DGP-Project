@@ -1,3 +1,4 @@
+import day_time
 import game_framework
 from pico2d import*
 
@@ -11,6 +12,8 @@ def init():
     image = load_image('resource/title.png')
     server.music = Music()
     server.music.init()
+    day_time.reset_time()
+    day_time.pause_time()
 
 def finish():
     global image

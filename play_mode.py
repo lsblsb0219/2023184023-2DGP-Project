@@ -1,3 +1,4 @@
+import day_time
 import game_framework
 from pico2d import *
 
@@ -11,6 +12,8 @@ from girl import Girl
 from music import Music
 
 def init():
+    day_time.resume_time() # 시간 다시 활성화
+
     server.music = Music()
     server.music.init()
 
@@ -62,12 +65,14 @@ def finish():
 
 def update():
     game_world.update()
+    day_time.update_time()
     game_world.handle_collisions()
 
 
 def draw():
     clear_canvas()
     game_world.render()
+    day_time.draw_time()
     update_canvas()
 
 def pause():
