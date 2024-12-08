@@ -103,7 +103,8 @@ class Seed:
             self.image.clip_draw(0, 1024 - 45, 18, 40, self.x, self.y, 18 * 2, 40 * 2)
         elif self.state == "grown":
             self.image.clip_draw(30, 1024 - 45, 18, 40, self.x, self.y, 18 * 2, 40 * 2)
-
+        elif self.state == "ripe":
+            self.image.clip_draw(80, 1024 - 40, 18, 40, self.x, self.y, 18 * 2, 40 * 2)
         draw_rectangle(*self.get_bb())
 
     def update(self):
@@ -111,8 +112,10 @@ class Seed:
         import server
         days_since_creation = server.game_day - self.created_day
 
-        if days_since_creation >= 3:
+        if self.state == "growing" and days_since_creation >= 3:
             self.state = "grown"
+        elif self.state == "grown" and days_since_creation >= 6:
+            self.state = "ripe"
         pass
 
     def get_bb(self):
