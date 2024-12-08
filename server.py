@@ -5,3 +5,4 @@ map = None
 running = None
 music = None
 frame_time = 0
+saved_hoes, saved_waters, saved_seeds = [], [], []

@@ -254,6 +254,19 @@ class Girl:
     def get_bb(self):
         return  self.x - 25, self.y - 50, self.x + 25, self.y + 30
 
+    # 상태 저장 함수
+    def save_state(self):
+        saved_hoes = [(hoe.x, hoe.y) for hoe in self.hoes]
+        saved_waters = [(water.x, water.y) for water in self.waters]
+        saved_seeds = [(seed.x, seed.y) for seed in self.seeds]
+        return saved_hoes, saved_waters, saved_seeds
+
+    # 상태 복원 함수
+    def restore_state(self, saved_hoes, saved_waters, saved_seeds):
+        self.hoes = [Hoe(x, y) for x, y in saved_hoes]
+        self.waters = [Water(x, y) for x, y in saved_waters]
+        self.seeds = [Seed(x, y) for x, y in saved_seeds]
+
     def select_item(self):
         if self.item == 'Water':
             if not self.hoes:
@@ -355,6 +368,8 @@ class Girl:
                 game_world.add_objects([select_item], 1)
                 game_world.add_collision_pair('hoe:hoe', hoe, None)
                 pass
+
+
 
         return self.hoes
 

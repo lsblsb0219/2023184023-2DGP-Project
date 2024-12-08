@@ -10,7 +10,17 @@ class Hoe:
         if Hoe.image == None:
             Hoe.image = load_image('resource/hoeDirt.png')
         self.x, self.y = x, y
+        self.saved_x = x  # 상태 저장을 위한 위치
+        self.saved_y = y  # 상태 저장을 위한 위치
 
+    def save_state(self):
+        # 상태 저장 시 위치 정보도 함께 저장
+        return self.x, self.y
+
+    def restore_state(self, saved_x, saved_y):
+        # 상태 복원 시 위치 정보 설정
+        self.x, self.y = saved_x, saved_y
+        self.saved_x, self.saved_y = saved_x, saved_y  # 복원된 위치 저장
 
     def draw(self):
         self.image.clip_draw(0, 50, 15, 15, self.x, self.y, 50, 50)
@@ -37,7 +47,17 @@ class Water:
         if Water.image == None:
             Water.image = load_image('resource/hoeDirtDark.png')
         self.x, self.y = x, y
+        self.saved_x = x  # 상태 저장을 위한 위치
+        self.saved_y = y  # 상태 저장을 위한 위치
 
+    def save_state(self):
+        # 상태 저장 시 위치 정보도 함께 저장
+        return self.x, self.y
+
+    def restore_state(self, saved_x, saved_y):
+        # 상태 복원 시 위치 정보 설정
+        self.x, self.y = saved_x, saved_y
+        self.saved_x, self.saved_y = saved_x, saved_y  # 복원된 위치 저장
 
     def draw(self):
         hoe_exists = any(isinstance(obj, Hoe) for layer in game_world.world for obj in layer)
@@ -64,6 +84,17 @@ class Seed:
         if Seed.image == None:
             Seed.image = load_image('resource/crops.png')
         self.x, self.y = x, y
+        self.saved_x = x  # 상태 저장을 위한 위치
+        self.saved_y = y  # 상태 저장을 위한 위치
+
+    def save_state(self):
+        # 상태 저장 시 위치 정보도 함께 저장
+        return self.x, self.y
+
+    def restore_state(self, saved_x, saved_y):
+        # 상태 복원 시 위치 정보 설정
+        self.x, self.y = saved_x, saved_y
+        self.saved_x, self.saved_y = saved_x, saved_y  # 복원된 위치 저장
 
     def draw(self):
         self.image.clip_draw(0, 1024 - 45, 18, 40, self.x, self.y, 18 * 2, 40 * 2)
