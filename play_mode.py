@@ -23,7 +23,7 @@ def init():
 
     if not hasattr(server, 'girl') or server.girl is None:
             server.girl = Girl()
-    game_world.add_object(server.girl, 1)
+    game_world.add_object(server.girl, 3)
     server.girl.x = 133
     server.girl.y = 380
 
