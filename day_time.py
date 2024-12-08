@@ -24,9 +24,9 @@ def update_time():
 
     server.elapsed_time += server.frame_time  # 경과 시간을 누적
 
-    if server.elapsed_time >= 10:  # 60초가 지나면
+    if server.elapsed_time >= 60:  # 60초가 지나면
         server.game_minutes += 1
-        if server.game_minutes >= 3:  # 20분이 되면 초기화
+        if server.game_minutes >= 20:  # 20분이 되면 초기화
             server.game_minutes = 0
             server.game_day += 1
         server.elapsed_time = 0  # 초 단위 누적 시간 초기화
