@@ -1,5 +1,4 @@
 import math
-
 from pico2d import load_image, draw_rectangle, clamp, load_font
 import game_framework
 import game_world
@@ -380,3 +379,9 @@ class Girl:
             game_framework.change_mode(house_in_mode)
         if group == 'girl:door':
             game_framework.change_mode(play_mode)
+        if group == 'girl:bed':
+            self.x = 400
+            self.y = 300
+            server.game_day += 1
+            server.game_minutes = 0
+            server.elapsed_time = 0

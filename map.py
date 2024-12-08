@@ -103,3 +103,28 @@ class Door:
     def handle_collision(self, group, other):
         if group == 'girl:door':
             pass
+
+
+class Bed:
+    def __init__(self):
+        self.image = load_image('resource/furniture.png')
+        self.x = 580
+        self.y = 350
+
+    def update(self):
+        pass
+
+    def draw(self):
+        self.image.clip_draw(0, 1488 - 1090, 32, 60, self.x, self.y, 32 * 2, 60 * 2)
+        x1, y1, x2, y2 = self.get_bb()
+        draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
+                       x2 - server.map.window_left, y2 - server.map.window_bottom)
+
+        pass
+
+    def get_bb(self):
+        return self.x - 32, self.y - 60, self.x + 32, self.y + 60
+
+    def handle_collision(self, group, other):
+        if group == 'girl:bed':
+            pass

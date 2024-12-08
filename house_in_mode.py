@@ -7,7 +7,7 @@ import item_mode
 import title_mode
 import server
 
-from map import HouseIn, Door
+from map import HouseIn, Door, Bed
 from music import Music
 
 def init():
@@ -24,7 +24,11 @@ def init():
     door = Door()
     game_world.add_object(door, 0)
 
+    bed = Bed()
+    game_world.add_object(bed, 0)
+
     game_world.add_collision_pair('girl:door', server.girl, door)
+    game_world.add_collision_pair('girl:bed', server.girl, bed)
 
 
 def handle_events():
